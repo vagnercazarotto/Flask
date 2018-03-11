@@ -39,7 +39,8 @@ class Item(Resource):
 			required=True,
 			help = "this fild cannot be left blank !!"
 		)
-		data = request.get_json()
+		data = parser.parser_args()
+		
 		item = next(filter(lambda x : x['name'] == name, items), None)
 		if item is None:
 			item = {'name': name, 'price': data['price']}

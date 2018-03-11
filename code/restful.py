@@ -14,7 +14,7 @@ jwt = JWT(app, authenticate, identity) # /auth
 items = []
 
 class Item(Resource):
-	parser = reqparse.RequestParse()
+	parser = reqparse.RequestParser()
 	parser.add_argument('price',
 		type=float,
 		required=True,
@@ -29,7 +29,7 @@ class Item(Resource):
 	def post(self, name):
 		if next(filter(lambda x: x['name'] == name, items), None):
 			return {'message': "An item with name '{}' already exists".format(name)} , 400
-		data = Item.parser.parser_args()
+		data = Item.parser.parse_args()
 		item = {'name':name,'price':data['price']}
 		items.append(item)
 		return item, 201

@@ -18,7 +18,7 @@ class Item(Resource):
     )
 
 
-    @jwt_required()
+    @jwt_required
     def get(self, name):
         item = ItemModel.find_by_name(name)
         if item:
@@ -41,14 +41,14 @@ class Item(Resource):
         return item
 
 
-    @jwt_required()
+    @jwt_required
     def delete(self, name):
         item = ItemModel.find_by_name(name)
         if item:
             item.delete_from_db()
         return {'message':'Item Deleted!'}
 
-    @jwt_required()
+    @jwt_required
     def put(self, name):
         data = Item.parser.parse_args()
 

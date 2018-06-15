@@ -2,11 +2,14 @@ import sqlite3
 from flask_restful import Resource, reqparse
 from models.user import UserModel
 from werkzeug.security import safe_str_cmp
+from blacklist import BLACKLIST
 from flask_jwt_extended import (
     create_refresh_token, 
     create_access_token , 
     jwt_refresh_token_required,
-    get_jwt_identity
+    get_jwt_identity,
+    jwt_required,
+    get_raw_jwt
 )
 
 _user_parser = reqparse.RequestParser()
@@ -85,3 +88,10 @@ class TokenRefresh(Resource):
         current_user = get_jwt_identity()
         new_token = create_access_token(identity=current_user, fresh=False)
         return {'access_token': new_token}, 200
+
+class UserLogout(Resource):
+    @jwt_required
+    def post(self):
+        jti = get_raw_jwt()['jti'] # it's a unique id for JWT
+        BLACKLIST.add(jti)
+        return {'message':'Successfully logged out.'}, 200

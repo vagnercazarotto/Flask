@@ -10,7 +10,7 @@ class ItemModel(db.Model):
 	store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
 	store = db.relationship('StoreModel')
 
-	def __init__(self, name, price):
+	def __init__(self, name, price, store_id):
 		self.name = name
 		self.price = price
 		self.store_id = store_id
@@ -19,7 +19,7 @@ class ItemModel(db.Model):
 		return {'id': self.id ,
 			'name': self.name, 
 			'price': self.price, 
-			'store_id':self.store.id 
+			'store_id':self.store_id 
 		}
 
 	@classmethod
@@ -36,5 +36,5 @@ class ItemModel(db.Model):
 		db.session.commit()
 
 	def delete_from_db(self):
-		db.session.delet(self)
+		db.session.delete(self)
 		db.session.commit()

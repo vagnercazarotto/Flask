@@ -35,7 +35,7 @@ class UserRegister(Resource):
 class User(Resource):
     @classmethod
     def get(cls, user_id):
-        user = UserModel.find_by_id(user_id):
+        user = UserModel.find_by_id(user_id)
         if not user:
             return {'message': 'User not found'},404
         return user.json()
@@ -52,10 +52,9 @@ class User(Resource):
 
 class UserLogin(Resource):
 
-    @classmethod
-    def post(cls):
+    def post(self):
         # get data from parser
-        data = cls._user_parser.parse_args()
+        data = _user_parser.parse_args()
 
         # find user in database
         user = UserModel.find_by_username(data['username'])
@@ -63,7 +62,7 @@ class UserLogin(Resource):
         # check password
         # create access token
         # create refresh token (we will look at this later!)
-        if user and safe_str_cpm(user.password , data['password'])
+        if user and safe_str_cmp(user.password , data['password']):
             access_token = create_access_token(identity=user.id , fresh = True)
             refresh_token = create_refresh_token(user.id)
             return {
